@@ -1,0 +1,20 @@
+body {
+  background-color: skyblue;
+}
+
+#voicestable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#voicestable td, #voicestable th {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+#voicestable tr:hover {background-color: #ddd;}
+
+.savebutton {height: 40px;}
+.new {background-color: yellow;}
+
+input {width: 100%;}
