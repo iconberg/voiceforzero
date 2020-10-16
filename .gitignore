@@ -1,6 +1,7 @@
 # Except living data and wav-files (no rights to publicity)
-data/
-voices/
+data/zero.json*
+voices/ed7*.wav
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

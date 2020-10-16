@@ -21,7 +21,8 @@ logtype = 'Security' # file access logged in security logs
 
 file_filter = '\\se\\ed7v' # only files from se\ed7v.....wav
 proc_filter = 'ED_ZERO.exe' # filter process
-proc_filter = 'wmplayer.exe' # filter process
+#uncomment line below for testing with windows media player
+#proc_filter = 'wmplayer.exe' # filter process
 
 json_file = './data/zero.json'
 
