@@ -108,7 +108,7 @@ class zeroVoice(object):
                 json.dump(voices, f, indent=4)
 
 
-    def sortvoices(self, voice):
+    def sortlastvoices(self, voice):
         return voices[voice]['last_occur']
 
     
@@ -128,7 +128,7 @@ class zeroVoice(object):
             template_entry = f.read()
 
         voices_html = ''
-        for row, voice in enumerate(reversed(sorted(voices, key=self.sortvoices))):
+        for row, voice in enumerate(reversed(sorted(voices, key=self.sortlastvoices))):
             if row > 7:
                 break
             data = voices[voice]
@@ -136,6 +136,40 @@ class zeroVoice(object):
             voices_html = voices_html + voice_html
         html = template.format(voices_html=voices_html)
         return html
+
+
+    @cherrypy.expose
+    def voices(self, **postdata):
+        """show all voices for editing"""
+        if postdata:
+            print(postdata)
+        template_file = './public/template_voices.html'
+        template_entry_file = './public/template_voices_entry.html'
+        template = None
+        template_entry = None
+        
+        with open(template_file) as f:
+            template = f.read()
+        with open(template_entry_file) as f:
+            template_entry = f.read()
+
+        voices_html = ''
+        for row, voice in enumerate(voices):
+            if row > 5:
+                break
+            data = voices[voice]
+            voice_html = template_entry.format(voice=voice, voiceid=row, **data)
+            voices_html = voices_html + voice_html
+        html = template.format(voices_html=voices_html)
+        return html
+
+
+    @cherrypy.expose
+    def voice_save(self, **postdata):
+        print("voice_save")
+        if postdata:
+            print(postdata)
+        return ""
 
 
     @cherrypy.expose
@@ -207,6 +241,12 @@ def load_user_config():
 def save_user_config(config):
     with open(user_config_file, 'w') as f:
         json.dump(config, f, indent = 4)
+
+
+def init_voice_files():
+    files = [ file for file in os.listdir('./voices') if file.endswith('.wav') ]
+    for file in files:
+        voices[file] = voice_data_dict.copy()
         
 
 if __name__ == '__main__':
@@ -214,20 +254,26 @@ if __name__ == '__main__':
     user_config = load_user_config()
     pprint.pprint(user_config)
     backup_translation_file()
+    init_voice_files()
 
     #open event log
+    seclog_available = None
     try:
         handle = win32evtlog.OpenEventLog(None, logtype)
+        seclog_available = True
     except Exception as e:
         print('Eventlog could not be opened, administrator rights needed')
-        print(e)
+        seclog_available = False
 
     #split into two processes
     #process for the webinterface
     base_url = url='http://127.0.0.1:8080'
     zero_path = user_config.get('zero_path', '')
     if os.path.isdir(zero_path):
-        url = base_url + '/lastvoices'
+        if seclog_available == True:
+            url = base_url + '/lastvoices'
+        else:
+            url = base_url + '/voices'
     else:
         url = base_url + '/public/config.html'
     webpid = threading.Thread(target=webinterface, kwargs=dict(url=url))

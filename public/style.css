@@ -5,16 +5,20 @@ body {
 #voicestable {
 	width: 100%;
 	border-collapse: collapse;
+	margin: 0px;
+}
+
+.highlight:hover {
+	background-color: yellow;
 }
 
 #voicestable td, #voicestable th {
   border: 1px solid #ddd;
-  padding: 4px;
+  padding: 1px;
 }
-
-#voicestable tr:hover {background-color: #ddd;}
 
 .savebutton {height: 40px;}
 .new {background-color: yellow;}
 
 input {width: 100%;}
+

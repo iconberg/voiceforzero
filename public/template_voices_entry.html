@@ -1,0 +1,17 @@
+<form onsubmit="return post_voice({voiceid})">
+<table id="voicestable" class="highlight">
+<tr class="{status}">
+<td><audio controls src="/voices/{voice}"> Your browser does not support the <code>audio</code> element.</audio></td>
+<td><input type="text" name="voice" id="voice{voiceid}" value="{voice}" readonly></td>
+<td><input placeholder="Speaker" list="speaker" name="speaker" id="speaker{voiceid}" value="{speaker}"></td>
+<td><input placeholder="Spoken when" list="spoken_when" name="spoken_when" id="spoken_when{voiceid}" value="{spoken_when}"></td>
+<td><input placeholder="Comment" type="text" name="comment" id="comment{voiceid}" value="{comment}"></td>
+<td><input list="translation_language" name="translation_language" id="translation_language{voiceid}" value="EN" readonly></td>
+</tr>
+<tr class="{status}">
+<td></td>
+<td colspan="5"><input placeholder="Translation" type="text" name="translation" id="translation{voiceid}" value="{translation}"></td>
+</tr>
+<tr><td colspan="5"></td><td><input type="submit" value="Save"/></td></tr>
+</table>
+</form>

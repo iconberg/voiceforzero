@@ -1,0 +1,24 @@
+<datalist id="speaker">
+<option value="Lloyd Bannings">
+<option value="Elie McDowell">
+<option value="Tio Plato">
+<option value="Randy Orlande">
+<option value="">
+<option value="Sergei Lou">
+<option value="Arios McLaine">
+<option value="Grace Lynn">
+<option value="Estelle Bright">
+<option value="Joshua Bright">
+</datalist>
+
+<datalist id="spoken_when">
+<option value="Battle">
+<option value="Map">
+<option value="Scene">
+</datalist>
+
+<datalist id="translation_language">
+<option value="EN">
+<option value="DE">
+<option value="FR">
+</datalist>
