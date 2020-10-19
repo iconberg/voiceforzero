@@ -1,12 +1,22 @@
 function post_voice(voiceid){
-var formfields = ['voice', 'speaker', 'spoken_when', 'comment', 'translation_language', 'translation']
+var formfields = ['voice', 'speaker', 'spoken_when', 'comment', 'translation_language', 'translation', 'need_sfx', 'no_speech']
 let data = new URLSearchParams();
 
 try {  
   for (index = 0; index < formfields.length; index++) {
 	fieldname = formfields[index];
-	data.append(fieldname, document.getElementById(fieldname+voiceid).value);
-  }  
+	if (document.getElementById(fieldname+voiceid).type == "checkbox") {
+		if (document.getElementById(fieldname+voiceid).checked) {
+			data.append(fieldname, "checked")
+		}
+		else {
+			data.append(fieldname, "")
+		}
+	}
+	else {
+		data.append(fieldname, document.getElementById(fieldname+voiceid).value);
+	}
+  }
   
   fetch("/voice_save", {
     method: 'post',
@@ -23,10 +33,9 @@ try {
   });
   
   return false;
-}
+  }
 
 catch(err) {
   document.getElementById("err_message").innerHTML = err.message;
-}
-  
+  }
 }

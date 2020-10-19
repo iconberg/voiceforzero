@@ -20,5 +20,10 @@ body {
 .savebutton {height: 40px;}
 .new {background-color: yellow;}
 
-input {width: 100%;}
+input {
+	width: 100%;
+}
+input[type=checkbox] {
+  width: auto;
+}
 

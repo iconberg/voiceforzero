@@ -9,8 +9,11 @@
 <td><input list="translation_language" name="translation_language" id="translation_language{voiceid}" value="EN" readonly></td>
 </tr>
 <tr class="{status}">
-<td></td>
-<td colspan="5"><input placeholder="Translation" type="text" name="translation" id="translation{voiceid}" value="{translation}"></td>
+<td>
+<label for="need_sfx{voiceid}">Need SFX</label><input type="checkbox" name="need_sfx" id="need_sfx{voiceid}" {need_sfx}>
+<label for="no_speech{voiceid}">No speech</label><input type="checkbox" name="no_speech" id="no_speech{voiceid}" {no_speech}>
+</td>
+<td colspan="5"><input placeholder="Translation" type="text" name="translation" id="translation{voiceid}" value="{translation}" autocomplete="off"></td>
 </tr>
 <tr><td colspan="5"></td><td><input type="submit" value="Save"/></td></tr>
 </table>
