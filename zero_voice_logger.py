@@ -1,18 +1,18 @@
 import win32con
 import win32event
 import win32evtlog
+import cherrypy
 import datetime
 import time
 import os
 import threading
-import cherrypy
 import webbrowser
 import collections
 import itertools
 import json
 import shutil
-
-
+import signal
+import sys
 import pprint
 
 
@@ -23,7 +23,8 @@ logtype = 'Security' # file access logged in security logs
 file_filter = '\\se\\ed7v' # only files from se\ed7v.....wav
 proc_filter = 'ED_ZERO.exe' # filter process
 #uncomment line below for testing with windows media player
-proc_filter = 'wmplayer.exe' # filter process
+#proc_filter = 'wmplayer.exe' # filter process
+webpid = None
 
 json_file = './data/zero.json'
 
@@ -96,25 +97,25 @@ class zeroVoice(object):
             return f.read()
             
 
-    def updatevoices(self, data):
-        #convert single data of row into list
-        if type(data['voice']) != type([]):
-            for key in data:
-                temp = []
-                temp.append(data[key])
-                data[key] = temp
-        for key, voice in enumerate(data['voice']):
-            voices[voice]['speaker'] = data['speaker'][key]
-            voices[voice]['spoken_when'] = data['spoken_when'][key]
-            voices[voice]['comment'] = data['comment'][key]
-            voices[voice]['translation_language'] = data['translation_language'][key]
-            voices[voice]['translation'] = data['translation'][key]
-            voices[voice]['status'] = ''
-        else:
-            now = datetime.datetime.now().strftime("_%Y%m%d_%H%M")
-            shutil.copyfile(json_file, json_file + now)
-            with open(json_file, 'w') as f:
-                json.dump(voices, f, indent=4)
+##    def updatevoices(self, data):
+##        #convert single data of row into list
+##        if type(data['voice']) != type([]):
+##            for key in data:
+##                temp = []
+##                temp.append(data[key])
+##                data[key] = temp
+##        for key, voice in enumerate(data['voice']):
+##            voices[voice]['speaker'] = data['speaker'][key]
+##            voices[voice]['spoken_when'] = data['spoken_when'][key]
+##            voices[voice]['comment'] = data['comment'][key]
+##            voices[voice]['translation_language'] = data['translation_language'][key]
+##            voices[voice]['translation'] = data['translation'][key]
+##            voices[voice]['status'] = ''
+##        else:
+##            now = datetime.datetime.now().strftime("_%Y%m%d_%H%M")
+##            shutil.copyfile(json_file, json_file + now)
+##            with open(json_file, 'w') as f:
+##                json.dump(voices, f, indent=4)
 
 
     def sortlastvoices(self, voice):
@@ -143,6 +144,20 @@ class zeroVoice(object):
             voices_html = voices_html + voice_html
         html = template.format(datalist_html=template_datalist, voices_html=voices_html)
         return html
+
+
+    @cherrypy.expose
+    def lastvoices_list(self):
+        template_entry_file = './public/template_voices_entry.html'
+        template_entry = self.read_template(template_entry_file)
+        voices_html = ''
+        for row, voice in enumerate(reversed(sorted(voices, key=self.sortlastvoices))):
+            if voices[voice]['status'] == None:
+                break
+            data = voices[voice]
+            voice_html = template_entry.format(voiceid=row, **data)
+            voices_html = voices_html + voice_html
+        return voices_html
 
 
     @cherrypy.expose
@@ -189,6 +204,7 @@ class zeroVoice(object):
         if postdata:
             pprint.pprint(postdata)
             voices[postdata['voice']] = {**voices[postdata['voice']], **postdata}
+            voices[postdata['voice']]['status'] = ''
             filename = './data/{voice}.json'.format(voice=postdata['voice'][:-4])
             with open(filename, 'w') as f:
                 json.dump(postdata, f, indent=4)
@@ -284,8 +300,14 @@ def voice_load(voice):
     return data
 
 
+def clean_exit(signal_received, frame):
+    print("exiting...")
+    exit(0)
+
+
 if __name__ == '__main__':
 
+    signal.signal(signal.SIGINT, clean_exit)
     user_config = load_user_config()
     pprint.pprint(user_config)
     #backup_translation_file()

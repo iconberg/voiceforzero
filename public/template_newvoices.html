@@ -3,12 +3,16 @@
 <link rel="stylesheet" href="./public/style.css">
 <script src="/public/script.js"></script>
 </head>
-<body>
+<body onload="check_update()">
 <h1>Last voices</h1>
+<a href="/voices">All voices</a>
+<p id="check_update"></p>
 
 {datalist_html}
 
+<div id="voices_list">
 {voices_html}
+</div>
 
 </body>
 </html>
