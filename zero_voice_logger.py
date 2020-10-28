@@ -79,7 +79,8 @@ def collect_voice(voice):
     """insert new and update old voice data"""
     now = datetime.datetime.now().strftime("%Y%m%d %H:%M:%S")
     voice_data = voices[voice]
-    voice_data['status'] = 'new'
+    if voice_data['status'] == None:
+        voice_data['status'] = 'new'
     voice_data['last_occur'] = now
     voices[voice] = voice_data
 
@@ -130,29 +131,31 @@ class zeroVoice(object):
         template_file = './public/template_newvoices.html'
         template_entry_file = './public/template_voices_entry.html'
         template_datalist_file = './public/template_datalist.txt'
-        
-        template = self.read_template(template_file)
-        template_entry = self.read_template(template_entry_file)
-        template_datalist = self.read_template(template_datalist_file)
 
-        voices_html = ''
-        for row, voice in enumerate(reversed(sorted(voices, key=self.sortlastvoices))):
-            if voices[voice]['status'] == None:
-                break
-            data = voices[voice]
-            voice_html = template_entry.format(voiceid=row, **data)
-            voices_html = voices_html + voice_html
+        template_datalist = self.read_template(template_datalist_file)        
+        template = self.read_template(template_file)
+##        template_entry = self.read_template(template_entry_file)
+
+##        voices_html = ''
+##        for row, voice in enumerate(reversed(sorted(voices, key=self.sortlastvoices))):
+##            if voices[voice]['status'] == None:
+##                break
+##            data = voices[voice]
+##            voice_html = template_entry.format(voiceid=row, **data)
+##            voices_html = voices_html + voice_html
+        voices_html = self.lastvoices_list()
         html = template.format(datalist_html=template_datalist, voices_html=voices_html)
         return html
 
 
     @cherrypy.expose
     def lastvoices_list(self):
+        """give data just for voice entries"""
         template_entry_file = './public/template_voices_entry.html'
         template_entry = self.read_template(template_entry_file)
         voices_html = ''
         for row, voice in enumerate(reversed(sorted(voices, key=self.sortlastvoices))):
-            if voices[voice]['status'] == None:
+            if (voices[voice]['status'] == None) or (row > 29):
                 break
             data = voices[voice]
             voice_html = template_entry.format(voiceid=row, **data)
@@ -204,7 +207,7 @@ class zeroVoice(object):
         if postdata:
             pprint.pprint(postdata)
             voices[postdata['voice']] = {**voices[postdata['voice']], **postdata}
-            voices[postdata['voice']]['status'] = ''
+            voices[postdata['voice']]['status'] = 'saved'
             filename = './data/{voice}.json'.format(voice=postdata['voice'][:-4])
             with open(filename, 'w') as f:
                 json.dump(postdata, f, indent=4)
@@ -296,6 +299,7 @@ def voice_load(voice):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             voice_data = json.load(f)
+            voice_data['status'] = 'old'
             data = {**data, **voice_data}
     return data
 

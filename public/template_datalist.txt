@@ -2,13 +2,15 @@
 <option value="Lloyd Bannings">
 <option value="Elie McDowell">
 <option value="Tio Plato">
-<option value="Randy Orlande">
+<option value="Randy Orlando">
 <option value="">
+<option value="Fran Seeker">
 <option value="Sergei Lou">
 <option value="Arios McLaine">
 <option value="Grace Lynn">
 <option value="Estelle Bright">
 <option value="Joshua Bright">
+<option value="Noel Seeker">
 </datalist>
 
 <datalist id="spoken_when">

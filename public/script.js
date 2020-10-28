@@ -7,7 +7,7 @@ function check_update()
 	document.getElementById("check_update").innerHTML = "<span>Update activated.</span>";
 	fetch_update();
   }
-    setTimeout("check_update()", 4000);
+    setTimeout("check_update()", 1000);
 }
 
 function fetch_update()

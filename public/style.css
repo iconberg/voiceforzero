@@ -9,7 +9,7 @@ body {
 }
 
 .highlight:hover {
-	background-color: yellow;
+	background-color: grey;
 }
 
 #voicestable td, #voicestable th {
@@ -19,6 +19,8 @@ body {
 
 .savebutton {height: 40px;}
 .new {background-color: yellow;}
+.old {}
+.saved {}
 
 input {
 	width: 100%;
