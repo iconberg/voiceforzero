@@ -1,3 +1,5 @@
+var last_fetch = "";
+
 function check_update()
 {
   if (document.hasFocus()) {
@@ -17,7 +19,10 @@ fetch('/lastvoices_list')
         return response.text()
     })
     .then(function(html) {
-		document.getElementById("voices_list").innerHTML = html;
+		if (last_fetch != html) {
+			document.getElementById("voices_list").innerHTML = html;
+			last_fetch = html;
+		}
     })
     .catch(function(err) {  
         console.log('Failed to fetch page: ', err);  
@@ -58,6 +63,10 @@ try {
   .catch(function (error) {
     console.log(error)
   });
+
+  element = document.getElementById("V"+voiceid);
+  element.classList.remove('new');
+  element.classList.add('saved');
   
   return false;
   }

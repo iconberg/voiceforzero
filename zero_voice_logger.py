@@ -17,7 +17,14 @@ import pprint
 
 
 server = 'localhost' # get local events
-logqry = '*[System[(EventID=4663)]]' # Filter access event
+# logqry Filter access event
+logqry = """
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">*[System[(EventID=4663) and TimeCreated[timediff(@SystemTime) &lt;= 10000]]]</Select>
+  </Query>
+</QueryList>
+"""
 logtype = 'Security' # file access logged in security logs
 
 file_filter = '\\se\\ed7v' # only files from se\ed7v.....wav

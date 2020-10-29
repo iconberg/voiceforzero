@@ -1,6 +1,6 @@
-<form onsubmit="return post_voice({voiceid})">
+<form id="V{voiceid}" class="{status}" onsubmit="return post_voice({voiceid})">
 <table id="voicestable" class="highlight">
-<tr class="{status}">
+<tr>
 <td><audio controls src="/voices/{voice}"> Your browser does not support the <code>audio</code> element.</audio></td>
 <td><input type="text" name="voice" id="voice{voiceid}" value="{voice}" readonly></td>
 <td><input placeholder="Speaker" list="speaker" name="speaker" id="speaker{voiceid}" value="{speaker}"></td>
@@ -8,7 +8,7 @@
 <td><input placeholder="Comment" type="text" name="comment" id="comment{voiceid}" value="{comment}"></td>
 <td><input list="translation_language" name="translation_language" id="translation_language{voiceid}" value="EN" readonly></td>
 </tr>
-<tr class="{status}">
+<tr>
 <td>
 <label for="need_sfx{voiceid}">Need SFX</label><input type="checkbox" name="need_sfx" id="need_sfx{voiceid}" {need_sfx}>
 <label for="no_speech{voiceid}">No speech</label><input type="checkbox" name="no_speech" id="no_speech{voiceid}" {no_speech}>
