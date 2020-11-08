@@ -98,6 +98,7 @@ class zeroVoice(object):
     def __init__(self):
         self.voices_page_size = 10
         self.voices_page = 1
+        self.filter_speaker = ""
 
 
     def read_template(self, file):
@@ -130,6 +131,14 @@ class zeroVoice(object):
         if voices[voice]['last_occur'] == None:
             return ""
         return voices[voice]['last_occur']
+
+
+    def filter_voices_speaker(self, data):
+        if self.filter_speaker == '':
+            return True
+        else:
+            if data[1]['speaker'] == self.filter_speaker:
+                return True
 
     
     @cherrypy.expose
@@ -171,7 +180,7 @@ class zeroVoice(object):
 
 
     @cherrypy.expose
-    def voices(self):
+    def voices(self, **postdata):
         """show all voices for editing"""
         template_file = './public/template_voices.html'
         template_entry_file = './public/template_voices_entry.html'
@@ -181,10 +190,14 @@ class zeroVoice(object):
         template_entry = self.read_template(template_entry_file)
         template_datalist = self.read_template(template_datalist_file)
 
+        if 'filter_speaker' in postdata:
+            self.filter_speaker = postdata['filter_speaker']
+
         voices_html = ''
         page_from = (self.voices_page - 1) * self.voices_page_size
         page_to = (self.voices_page - 1) * self.voices_page_size + self.voices_page_size
-        for row, voice in enumerate(dict(itertools.islice(voices.items(),
+        filter_voices = dict(filter(self.filter_voices_speaker, voices.items()))
+        for row, voice in enumerate(dict(itertools.islice(filter_voices.items(),
                                                           page_from,
                                                           page_to))):
             data = voices[voice]

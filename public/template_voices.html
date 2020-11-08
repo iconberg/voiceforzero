@@ -4,20 +4,40 @@
 <script src="/public/script.js"></script>
 </head>
 <body>
-<h1>Voices</h1>
-<a href="/lastvoices">Last voices</a>
-<p id="err_message"></p>
 
-{datalist_html}
-
-<table>
+<table style="width:100%;">
 <tr>
-<td><a href="voices_prev">Prev</a></td>
-<td><a href="voices_next">Next</a></td>
+<td><h1>Voices</h1></td>
+<td style="text-align:center;">
+<form>
+<input placeholder="Filter Speaker" list="speaker" name="filter_speaker" id="filter_speaker">
+<input type="submit" value="Filter"/>
+</form>
+</td>
+<td style="text-align:right;">
+<p id="err_message"></p>
+<a href="/lastvoices">Last voices</a><br>
+<a href="voices_prev">Prev</a>
+<a href="voices_next">Next</a>
+</td>
 </tr>
 </table>
 
+{datalist_html}
+
 {voices_html}
+
+<table style="width:100%;">
+<tr>
+<td></td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:right;">
+<a href="voices_prev">Prev</a>
+<a href="voices_next">Next</a>
+</td>
+</tr>
+</table>
 
 </body>
 </html>

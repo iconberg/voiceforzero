@@ -8,13 +8,13 @@ body {
 	margin: 0px;
 }
 
-.highlight:hover {
-	background-color: grey;
-}
-
 #voicestable td, #voicestable th {
   border: 1px solid #ddd;
   padding: 1px;
+}
+
+.highlight:hover {
+	background-color: grey;
 }
 
 .savebutton {height: 40px;}
